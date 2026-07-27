@@ -1,0 +1,4 @@
+httpx>=0.27
+python-dotenv>=1.0
+pypdf>=6.0
+trafilatura>=2.0

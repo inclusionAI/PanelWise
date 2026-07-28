@@ -178,4 +178,4 @@ fusion = await run_fusion_messages(
 
 ## 许可证与贡献者
 
-PanelWise 使用 [Apache License 2.0](./LICENSE)。初始贡献者见 [`CONTRIBUTORS.md`](./CONTRIBUTORS.md)，source-only 发布记录见 [`SOURCE_PROVENANCE.md`](./SOURCE_PROVENANCE.md)。
+PanelWise 使用 [Apache License 2.0](./LICENSE)。初始贡献者见 [`CONTRIBUTORS.md`](./CONTRIBUTORS.md)。

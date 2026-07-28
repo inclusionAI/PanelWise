@@ -60,6 +60,8 @@ class ZenMuxClient:
     async def chat(self, stage: str, payload: dict) -> dict:
         """Send one ZenMux chat completion request with OpenRouter-like retries."""
         body = self._normalize_payload(payload)
+        # 对齐 OpenRouterClient：请求带回 usage，便于 CostTracker 统计成本/用量。
+        body.setdefault("usage", {"include": True})
         original_model = payload.get("model")
         remapped_model = body.get("model")
 

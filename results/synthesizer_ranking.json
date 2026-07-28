@@ -1,0 +1,8 @@
+{
+  "z-ai/glm-5.1": 67.27,
+  "google/gemini-3.1-pro-preview": 59.39,
+  "minimax/minimax-m3": 68.83,
+  "anthropic/claude-opus-4.8": 72.8,
+  "qwen/qwen3.7-max": 63.08,
+  "openai/gpt-5.5": 68.59
+}

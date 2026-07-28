@@ -1,0 +1,23 @@
+{
+  "fusion": 75.07,
+  "n": 100,
+  "solo": {
+    "openai/gpt-5.5": 63.71,
+    "anthropic/claude-opus-4.8": 66.93,
+    "google/gemini-3.1-pro-preview": 51.4
+  },
+  "by_domain": {
+    "Needle in a Haystack": 76.02,
+    "Finance": 72.61,
+    "Shopping/Product Comparison": 74.34,
+    "Academic": 84.13,
+    "Technology": 67.77,
+    "UX Design": 71.21,
+    "General Knowledge": 71.82,
+    "Law": 90.48,
+    "Medicine": 80.47,
+    "Personalized Assistant": 68.09
+  },
+  "elapsed_min": 122.0,
+  "total_cost_usd": 401.31
+}

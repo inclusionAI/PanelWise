@@ -1,0 +1,4 @@
+# Optional official DRACO rubric grader used by budget_fusion_full.py,
+# budget_fusion_synth.py, and regrade_official.py. Requires Python >=3.10.
+# Canonical source: https://github.com/paper-instruments/rubric
+rubric==2.2.0

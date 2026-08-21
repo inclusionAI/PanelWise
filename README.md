@@ -17,6 +17,10 @@
 
 PanelWise starts with a simple question: if every weaker model produces an answer with something worth keeping, can we combine the complementary parts of those answers into a result that outperforms a stronger individual model? PanelWise lets multiple models examine the same problem independently and propose different analyses or next actions. It then organizes those judgments into a shared, executable workflow and submits the final result to an independent grader for verification.
 
+<p align="center">
+  <img src="./assets/panelwise-flow-concept.png" alt="Three different model perspectives flow through PanelWise into one fused answer" width="1000">
+</p>
+
 PanelWise applies this idea to two workflows:
 
 - **Deep research:** independent agents research the same question, a judge identifies consensus and blind spots, and a synthesizer writes one evidence-grounded report.
@@ -60,6 +64,12 @@ The coding workflow operates on a real working tree instead of asking models to 
 
 We evaluated PanelWise on all 100 tasks in [DRACO](https://arxiv.org/abs/2503.14476), a deep-research benchmark spanning ten domains. Each task is scored against a weighted rubric covering factual accuracy, breadth, depth, presentation, and citation quality.
 
+<p align="center">
+  <img src="./assets/panelwise-draco-results.png" alt="PanelWise DRACO benchmark results compared with published OpenRouter Fusion and Claude Fable 5 results" width="1000">
+</p>
+
+The **OpenRouter Fusion score of 68.3** and the **Claude Fable 5 score of 65.3** shown in the chart above and table below are both quoted from [OpenRouter's official Fusion launch post](https://openrouter.ai/blog/announcements/fusion-beats-frontier/). PanelWise scores come from our complete 100-task benchmark runs.
+
 | System | Models | DRACO score |
 |---|---|---:|
 | **PanelWise frontier panel** | Opus 4.8 + GPT-5.5 + Gemini 3.1 Pro | **73.68** |
@@ -73,7 +83,7 @@ OpenRouter's Fable 5 score reflects the 93 tasks it completed because content fi
 
 A panel-swap ablation replaced Qwen with Gemini 3.5 Flash and reached **70.95**. That experiment reused existing GLM and MiniMax reports, so we report it as evidence that model diversity can matter more than standalone ranking rather than as a fully independent end-to-end run.
 
-Sources: [`frontier_fusion_official.json`](./results/frontier_fusion_official.json), [`frontier_fusion_ourjudge.json`](./results/frontier_fusion_ourjudge.json), [`budget_fusion_glm_minimax_qwen.json`](./results/budget_fusion_glm_minimax_qwen.json), [`budget_swap_geminiflash.json`](./results/budget_swap_geminiflash.json), and [OpenRouter's published DRACO results](https://openrouter.ai/blog/announcements/fusion-beats-frontier/).
+External comparison source: [OpenRouter's official Fusion launch post](https://openrouter.ai/blog/announcements/fusion-beats-frontier/).
 
 ## A real coding case: combining the insights of smaller models
 
@@ -138,52 +148,10 @@ Results are written incrementally under `output/`, so interrupted runs can resum
 .venv/bin/python fusion_full.py
 ```
 
-## Python API
-
-PanelWise accepts either a prompt string or provider-compatible message arrays:
-
-```python
-from draco_eval.fusion import run_fusion_messages
-
-result = await run_fusion_messages(
-    client,
-    [
-        {"role": "system", "content": "Use concise citations."},
-        {"role": "user", "content": "Compare the strongest arguments for and against carbon taxes."},
-    ],
-    panel_models=["model-a", "model-b", "model-c"],
-    synth_model="model-d",
-    judge_model="model-e",
-    excluded_domains=[],
-    request_id="request-1",
-)
-```
-
-The stable message-based entry points are:
-
-- `draco_eval.fusion.run_fusion_messages`
-- `draco_eval.research_agent.run_research_messages`
-
-Underscore-prefixed helpers are internal implementation details.
-
-## Repository map
-
-```text
-draco_eval/
-  research_agent.py    Multi-step research agent with search and retrieval
-  fusion.py            Research panel → analysis → synthesis
-  judge.py             Local DRACO grader
-  official_judge.py    Adapter for the optional official rubric grader
-
-fusion_full.py         Supported full DRACO workflow
-results/               Committed aggregate experiment results
-```
-
 The root-level ablation and comparison scripts are preserved for research transparency. They may depend on historical model slugs, optional services, or intermediate artifacts and are not stable public interfaces.
 
 ## Evaluation and reproducibility notes
 
-- The committed JSON files preserve aggregate scores, model names, sample counts, and domain breakdowns. They do not contain the original tasks, per-task reports, complete trajectories, or a full run manifest.
 - External numbers are cited as published comparison points. Differences in model snapshots, search configuration, grader versions, and retry policy can affect absolute comparability.
 - `requirements.txt` contains core runtime dependencies. The optional official grader is pinned separately in `requirements-eval.txt` and requires Python 3.10 or newer.
 - Direct local page retrieval is enabled by default for trusted local research runs. Set `RESEARCH_ENABLE_DIRECT_FETCH=0` to disable it. This is an opt-out, not an SSRF sandbox.

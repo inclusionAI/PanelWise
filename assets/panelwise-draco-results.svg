@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+  <title id="title">PanelWise DRACO benchmark results</title>
+  <desc id="description">A horizontal bar chart comparing PanelWise frontier and budget panels with OpenRouter Fusion and Claude Fable 5 on DRACO.</desc>
+
+  <defs>
+    <filter id="paper" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="3" seed="17" result="noise" />
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
+      <feComponentTransfer in="mono" result="softNoise"><feFuncA type="table" tableValues="0 0.03" /></feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="softNoise" mode="multiply" />
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#241F19" flood-opacity="0.08" />
+    </filter>
+    <linearGradient id="panelwise-bar" x1="0" x2="1">
+      <stop offset="0" stop-color="#011736" />
+      <stop offset="1" stop-color="#273D5D" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#F3EFE6" filter="url(#paper)" />
+
+  <text x="110" y="105" fill="#25211C" font-family="Georgia, 'Times New Roman', serif" font-size="48" letter-spacing="-0.8">Multiple perspectives, measured.</text>
+  <text x="110" y="144" fill="#6A6259" font-family="Arial, Helvetica, sans-serif" font-size="17">DRACO deep-research benchmark · higher is better · scores out of 100</text>
+  <image href="panelwise-logo.svg" x="1270" y="55" width="220" height="76" preserveAspectRatio="xMidYMid meet" />
+
+  <!-- Plot area and scale -->
+  <text x="460" y="218" fill="#6A6259" font-family="Arial, Helvetica, sans-serif" font-size="14" letter-spacing="1.6">DRACO SCORE</text>
+  <g stroke="#D7D0C5" stroke-width="1">
+    <path d="M460 240 V780" />
+    <path d="M660 240 V780" />
+    <path d="M860 240 V780" />
+    <path d="M1060 240 V780" />
+    <path d="M1260 240 V780" />
+  </g>
+  <g fill="#756D63" font-family="Arial, Helvetica, sans-serif" font-size="15" text-anchor="middle">
+    <text x="460" y="267">0</text>
+    <text x="660" y="267">20</text>
+    <text x="860" y="267">40</text>
+    <text x="1060" y="267">60</text>
+    <text x="1260" y="267">80</text>
+  </g>
+
+  <!-- Comparison A -->
+  <text x="110" y="320" fill="#25211C" font-family="Georgia, 'Times New Roman', serif" font-size="23">Same frontier panel</text>
+  <text x="110" y="347" fill="#71695F" font-family="Arial, Helvetica, sans-serif" font-size="14">Opus 4.8 · GPT-5.5 · Gemini 3.1 Pro</text>
+  <path d="M1420 312 H1450 V462 H1420" fill="none" stroke="#C9654B" stroke-width="2" stroke-linecap="round" />
+  <text x="1470" y="374" fill="#C9654B" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">+5.38</text>
+  <text x="1470" y="397" fill="#8A5A4A" font-family="Arial, Helvetica, sans-serif" font-size="13">vs published</text>
+  <text x="1470" y="416" fill="#8A5A4A" font-family="Arial, Helvetica, sans-serif" font-size="13">Fusion</text>
+
+  <rect x="110" y="376" width="230" height="62" rx="15" fill="#252D37" />
+  <text x="135" y="402" fill="#F3EFE6" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="1.4">PANELWISE</text>
+  <text x="135" y="424" fill="#D9DFE9" font-family="Arial, Helvetica, sans-serif" font-size="15">frontier panel</text>
+  <g filter="url(#shadow)"><rect x="460" y="376" width="737" height="62" rx="15" fill="url(#panelwise-bar)" /></g>
+  <text x="1222" y="417" fill="#011736" font-family="Georgia, 'Times New Roman', serif" font-size="32" font-weight="700">73.68</text>
+
+  <rect x="110" y="462" width="230" height="62" rx="15" fill="#D9D2C6" />
+  <text x="135" y="488" fill="#544D44" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="1.2">OPENROUTER</text>
+  <text x="135" y="510" fill="#655D54" font-family="Arial, Helvetica, sans-serif" font-size="15">Fusion · published</text>
+  <rect x="460" y="462" width="683" height="62" rx="15" fill="#A89E91" />
+  <text x="1168" y="503" fill="#544D44" font-family="Georgia, 'Times New Roman', serif" font-size="32" font-weight="700">68.30</text>
+
+  <!-- Comparison B -->
+  <path d="M1420 614 H1450 V764 H1420" fill="none" stroke="#C49A3A" stroke-width="2" stroke-linecap="round" />
+  <text x="1470" y="672" fill="#9A7422" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">+1.12</text>
+  <text x="1470" y="695" fill="#80662E" font-family="Arial, Helvetica, sans-serif" font-size="13">vs strongest</text>
+  <text x="1470" y="714" fill="#80662E" font-family="Arial, Helvetica, sans-serif" font-size="13">published solo</text>
+
+  <rect x="110" y="614" width="230" height="62" rx="15" fill="#252D37" />
+  <text x="135" y="640" fill="#F3EFE6" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="1.4">PANELWISE</text>
+  <text x="135" y="662" fill="#D9DFE9" font-family="Arial, Helvetica, sans-serif" font-size="15">budget panel</text>
+  <g filter="url(#shadow)"><rect x="460" y="614" width="664" height="62" rx="15" fill="url(#panelwise-bar)" /></g>
+  <text x="1149" y="655" fill="#011736" font-family="Georgia, 'Times New Roman', serif" font-size="32" font-weight="700">66.42</text>
+
+  <rect x="110" y="700" width="230" height="62" rx="15" fill="#D9D2C6" />
+  <text x="135" y="726" fill="#544D44" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="1.2">SINGLE MODEL</text>
+  <text x="135" y="748" fill="#655D54" font-family="Arial, Helvetica, sans-serif" font-size="15">Claude Fable 5†</text>
+  <rect x="460" y="700" width="653" height="62" rx="15" fill="#A89E91" />
+  <text x="1138" y="741" fill="#544D44" font-family="Georgia, 'Times New Roman', serif" font-size="32" font-weight="700">65.30</text>
+
+  <path d="M110 839 H1490" stroke="#D3CCC1" stroke-width="1" />
+  <text x="110" y="875" fill="#5F574E" font-family="Arial, Helvetica, sans-serif" font-size="14">PanelWise results: all 100 DRACO tasks. OpenRouter Fusion and Claude Fable 5: published results.</text>
+  <text x="110" y="903" fill="#5F574E" font-family="Arial, Helvetica, sans-serif" font-size="14">† Fable 5 completed 93 of 100 tasks; seven were blocked by content filters. See methodology and source artifacts in the README.</text>
+  <text x="1490" y="903" fill="#756D63" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="end">panelwise</text>
+</svg>

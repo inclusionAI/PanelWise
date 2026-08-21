@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/panelwise-logo.svg" alt="PanelWise logo" width="720">
+</p>
+
 # PanelWise — 在历史 DRACO 实验中复现并超过 OpenRouter Fusion 公开分数
 
 [![CI](https://github.com/inclusionAI/PanelWise/actions/workflows/ci.yml/badge.svg)](https://github.com/inclusionAI/PanelWise/actions/workflows/ci.yml)

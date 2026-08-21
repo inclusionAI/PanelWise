@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 420" role="img" aria-labelledby="title description">
+  <title id="title">PanelWise logo</title>
+  <desc id="description">An owl formed from three letter P shapes beside the PanelWise wordmark.</desc>
+
+  <defs>
+    <style>
+      .wordmark { fill: #031b42; }
+      @media (prefers-color-scheme: dark) {
+        .wordmark { fill: #f5f7ff; }
+      }
+    </style>
+    <linearGradient id="indigo" x1="42" y1="35" x2="200" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2440ff"/>
+      <stop offset="1" stop-color="#0927df"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="378" y1="35" x2="220" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12cdef"/>
+      <stop offset="1" stop-color="#03aee7"/>
+    </linearGradient>
+    <linearGradient id="lime" x1="210" y1="214" x2="210" y2="414" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a8dd35"/>
+      <stop offset="1" stop-color="#77c72d"/>
+    </linearGradient>
+  </defs>
+
+  <g id="owl-mark">
+    <path
+      fill="url(#indigo)"
+      d="M42 35v188c0 64 35 107 90 137v-88c27 11 53 2 68-20 21-31 20-72 0-106C171 98 111 65 42 35Z"
+    />
+    <path
+      fill="url(#cyan)"
+      d="M378 35v188c0 64-35 107-90 137v-88c-27 11-53 2-68-20-21-31-20-72 0-106 29-48 89-81 158-111Z"
+    />
+
+    <circle cx="124" cy="190" r="45" fill="#031b42"/>
+    <circle cx="296" cy="190" r="45" fill="#031b42"/>
+
+    <path
+      fill="url(#lime)"
+      d="m210 218-68 42v130l52 24v-70h31c50 0 83-31 83-74 0-41-34-57-77-57-9 0-16 2-21 5Z"
+    />
+    <path
+      fill="#fff"
+      d="M185 276c16-8 34-8 50 0-4 17-12 27-25 35-13-8-21-18-25-35Z"
+    />
+  </g>
+
+  <text
+    class="wordmark"
+    x="452"
+    y="296"
+    font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="204"
+    font-weight="750"
+    letter-spacing="-9"
+  >PanelWise</text>
+</svg>

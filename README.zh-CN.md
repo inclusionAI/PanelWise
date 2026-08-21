@@ -188,6 +188,15 @@ results/               已提交的聚合实验结果
 - `requirements.txt` 包含核心运行依赖。可选的官方 grader 单独固定在 `requirements-eval.txt` 中，并要求 Python 3.10 或更高版本。
 - 可信本地研究运行默认启用直接网页读取。设置 `RESEARCH_ENABLE_DIRECT_FETCH=0` 可关闭此功能；该开关是 opt-out，不是 SSRF sandbox。
 
+## 贡献者
+
+<p>
+  <a href="https://github.com/jcguo123"><img src="https://avatars.githubusercontent.com/u/164945525?v=4" width="72" alt="Jiacheng Guo (@jcguo123)" title="Jiacheng Guo (@jcguo123)"></a>
+  <a href="https://github.com/DPLL"><img src="https://avatars.githubusercontent.com/u/1451688?v=4" width="72" alt="Yunlong Gao (@DPLL)" title="Yunlong Gao (@DPLL)"></a>
+</p>
+
+贡献者按照 [CONTRIBUTORS.md](./CONTRIBUTORS.md) 中约定的顺序展示。
+
 ## 许可证
 
 PanelWise 使用 [Apache License 2.0](./LICENSE)。初始贡献者见 [CONTRIBUTORS.md](./CONTRIBUTORS.md)。

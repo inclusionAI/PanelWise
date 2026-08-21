@@ -188,6 +188,15 @@ The root-level ablation and comparison scripts are preserved for research transp
 - `requirements.txt` contains core runtime dependencies. The optional official grader is pinned separately in `requirements-eval.txt` and requires Python 3.10 or newer.
 - Direct local page retrieval is enabled by default for trusted local research runs. Set `RESEARCH_ENABLE_DIRECT_FETCH=0` to disable it. This is an opt-out, not an SSRF sandbox.
 
+## Contributors
+
+<p>
+  <a href="https://github.com/jcguo123"><img src="https://avatars.githubusercontent.com/u/164945525?v=4" width="72" alt="Jiacheng Guo (@jcguo123)" title="Jiacheng Guo (@jcguo123)"></a>
+  <a href="https://github.com/DPLL"><img src="https://avatars.githubusercontent.com/u/1451688?v=4" width="72" alt="Yunlong Gao (@DPLL)" title="Yunlong Gao (@DPLL)"></a>
+</p>
+
+Contributors are displayed in the order defined in [CONTRIBUTORS.md](./CONTRIBUTORS.md).
+
 ## License
 
 PanelWise is available under the [Apache License 2.0](./LICENSE). Initial contributors are listed in [CONTRIBUTORS.md](./CONTRIBUTORS.md).

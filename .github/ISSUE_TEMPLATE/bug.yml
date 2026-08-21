@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible PanelWise defect
+title: "bug: "
+labels: [bug]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Include mode, provider/model IDs, redacted YAML, request ID, and commands. Never include secrets.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: PanelWise version
+      placeholder: 0.1.0 or commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Redacted errors or trajectory excerpt
+      render: text
+

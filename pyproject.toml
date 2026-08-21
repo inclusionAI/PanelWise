@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "panelwise"
+version = "0.1.0"
+description = "Embeddable multi-model aggregation for evaluated answers and shared execution trajectories"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+  { name = "PanelWise contributors" },
+]
+keywords = ["ai", "llm", "multi-model", "aggregation", "agents"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+  "httpx>=0.27,<1",
+  "PyYAML>=6.0,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2,<2",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+panelwise = "panelwise.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/inclusionAI/PanelWise"
+Documentation = "https://github.com/inclusionAI/PanelWise#readme"
+Issues = "https://github.com/inclusionAI/PanelWise/issues"
+Source = "https://github.com/inclusionAI/PanelWise"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/panelwise"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

@@ -82,6 +82,6 @@
 
   <path d="M110 839 H1490" stroke="#D3CCC1" stroke-width="1" />
   <text x="110" y="875" fill="#5F574E" font-family="Arial, Helvetica, sans-serif" font-size="14">PanelWise results: all 100 DRACO tasks. OpenRouter Fusion and Claude Fable 5: published results.</text>
-  <text x="110" y="903" fill="#5F574E" font-family="Arial, Helvetica, sans-serif" font-size="14">† Fable 5 completed 93 of 100 tasks; seven were blocked by content filters. See methodology and source artifacts in the README.</text>
+  <text x="110" y="903" fill="#5F574E" font-family="Arial, Helvetica, sans-serif" font-size="14">† Fable 5 completed 93 of 100 tasks; seven were blocked by content filters. See methodology and external source in the README.</text>
   <text x="1490" y="903" fill="#756D63" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="end">panelwise</text>
 </svg>

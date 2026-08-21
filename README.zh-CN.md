@@ -17,6 +17,10 @@
 
 PanelWise 的出发点是一个简单的问题：既然每个弱模型的回答都有自己的可取之处，我们能否融合这些回答中互补的部分，让最终结果超过更强的单一模型？PanelWise 让多个模型独立观察同一个问题，提出不同的分析或下一步行动；随后将这些判断组织成一条共享、可执行的工作轨迹，并把最终结果交给独立 grader 验证。
 
+<p align="center">
+  <img src="./assets/panelwise-flow-concept.png" alt="三个不同模型的视角经过 PanelWise 后融合为一个答案" width="1000">
+</p>
+
 PanelWise 将这一思想应用于两类工作流：
 
 - **深度研究：**多个研究 agent 独立调查同一个问题，judge 识别共识与盲区，synthesizer 生成一份基于证据的最终报告。
@@ -60,6 +64,12 @@ Git patch → 独立测试 harness
 
 我们在 [DRACO](https://arxiv.org/abs/2503.14476) 的全部 100 个任务上评测了 PanelWise。DRACO 是一个覆盖十个领域的深度研究 benchmark，每道题都通过加权 rubric 评估事实准确性、广度、深度、表达与引用质量。
 
+<p align="center">
+  <img src="./assets/panelwise-draco-results.png" alt="PanelWise DRACO 跑分与 OpenRouter Fusion、Claude Fable 5 公开结果的比较" width="1000">
+</p>
+
+上图和下表中的 **OpenRouter Fusion 68.3 分**与 **Claude Fable 5 65.3 分**均引用自 [OpenRouter 官方 Fusion 发布文章](https://openrouter.ai/blog/announcements/fusion-beats-frontier/)。PanelWise 分数来自我们在全部 100 个任务上的完整评测运行。
+
 | 系统 | 模型 | DRACO 分数 |
 |---|---|---:|
 | **PanelWise 前沿组合** | Opus 4.8 + GPT-5.5 + Gemini 3.1 Pro | **73.68** |
@@ -73,7 +83,7 @@ OpenRouter 的 Fable 5 分数来自它实际完成的 93 个任务；另外 7 �
 
 一项 panel-swap 消融实验将 Qwen 替换为 Gemini 3.5 Flash，得到 **70.95**。该实验复用了已有的 GLM 和 MiniMax 报告，因此我们将它作为“模型多样性可能比单模型排名更重要”的证据，而不把它描述为一次完全独立的端到端运行。
 
-数据来源：[`frontier_fusion_official.json`](./results/frontier_fusion_official.json)、[`frontier_fusion_ourjudge.json`](./results/frontier_fusion_ourjudge.json)、[`budget_fusion_glm_minimax_qwen.json`](./results/budget_fusion_glm_minimax_qwen.json)、[`budget_swap_geminiflash.json`](./results/budget_swap_geminiflash.json)，以及 [OpenRouter 公开的 DRACO 结果](https://openrouter.ai/blog/announcements/fusion-beats-frontier/)。
+外部对比数据来源：[OpenRouter 官方 Fusion 发布文章](https://openrouter.ai/blog/announcements/fusion-beats-frontier/)。
 
 ## 一个真实代码案例：融合多个小模型的智慧
 
@@ -138,52 +148,10 @@ Dry run 只检查本地配置，不会加载 benchmark 数据、调用模型或�
 .venv/bin/python fusion_full.py
 ```
 
-## Python API
-
-PanelWise 既可接收 prompt 字符串，也可接收 provider-compatible 的消息数组：
-
-```python
-from draco_eval.fusion import run_fusion_messages
-
-result = await run_fusion_messages(
-    client,
-    [
-        {"role": "system", "content": "Use concise citations."},
-        {"role": "user", "content": "Compare the strongest arguments for and against carbon taxes."},
-    ],
-    panel_models=["model-a", "model-b", "model-c"],
-    synth_model="model-d",
-    judge_model="model-e",
-    excluded_domains=[],
-    request_id="request-1",
-)
-```
-
-稳定的消息接口包括：
-
-- `draco_eval.fusion.run_fusion_messages`
-- `draco_eval.research_agent.run_research_messages`
-
-以下划线开头的辅助函数属于内部实现细节。
-
-## 仓库结构
-
-```text
-draco_eval/
-  research_agent.py    支持搜索与网页读取的多步研究 agent
-  fusion.py            研究 panel → 结构化分析 → 最终融合
-  judge.py             本地 DRACO grader
-  official_judge.py    可选官方 rubric grader 的适配器
-
-fusion_full.py         受支持的完整 DRACO 工作流
-results/               已提交的聚合实验结果
-```
-
 仓库根目录的消融与比较脚本为研究透明度而保留。它们可能依赖历史模型 slug、可选服务或中间产物，不属于稳定公共接口。
 
 ## 评测与复现说明
 
-- 已提交的 JSON 文件保留聚合分数、模型名称、样本数和领域明细，不包含原始题目、逐题报告、完整轨迹或完整运行 manifest。
 - 外部数字仅作为已注明出处的公开比较点。模型快照、搜索配置、grader 版本和重试策略的差异都可能影响绝对可比性。
 - `requirements.txt` 包含核心运行依赖。可选的官方 grader 单独固定在 `requirements-eval.txt` 中，并要求 Python 3.10 或更高版本。
 - 可信本地研究运行默认启用直接网页读取。设置 `RESEARCH_ENABLE_DIRECT_FETCH=0` 可关闭此功能；该开关是 opt-out，不是 SSRF sandbox。

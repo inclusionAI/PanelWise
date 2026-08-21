@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+  <title id="title">PanelWise multi-model fusion</title>
+  <desc id="description">Three differently colored model responses flow into PanelWise and emerge as one unified answer.</desc>
+
+  <defs>
+    <filter id="paper" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="3" seed="17" result="noise" />
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
+      <feComponentTransfer in="mono" result="softNoise">
+        <feFuncA type="table" tableValues="0 0.035" />
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="softNoise" mode="multiply" />
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#241F19" flood-opacity="0.09" />
+    </filter>
+    <marker id="arrow-coral" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="none" stroke="#C9654B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="none" stroke="#C49A3A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="none" stroke="#527C8F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="none" stroke="#252D37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#F3EFE6" filter="url(#paper)" />
+
+  <text x="110" y="105" fill="#25211C" font-family="Georgia, 'Times New Roman', serif" font-size="42" letter-spacing="-0.6">Different models see different things.</text>
+  <text x="1490" y="105" fill="#6A6259" font-family="Arial, Helvetica, sans-serif" font-size="16" letter-spacing="2.2" text-anchor="end">MULTI-MODEL FUSION</text>
+
+  <!-- Independent model responses -->
+  <g filter="url(#shadow)">
+    <rect x="110" y="175" width="330" height="142" rx="26" fill="#D9755C" />
+    <rect x="110" y="355" width="330" height="142" rx="26" fill="#D2AA4D" />
+    <rect x="110" y="535" width="330" height="142" rx="26" fill="#688EA0" />
+  </g>
+
+  <g fill="#FBF8F1" font-family="Arial, Helvetica, sans-serif">
+    <text x="144" y="217" font-size="14" font-weight="700" letter-spacing="2">MODEL A</text>
+    <text x="144" y="397" font-size="14" font-weight="700" letter-spacing="2">MODEL B</text>
+    <text x="144" y="577" font-size="14" font-weight="700" letter-spacing="2">MODEL C</text>
+  </g>
+
+  <g fill="none" stroke="#FBF8F1" stroke-linecap="round" opacity="0.92">
+    <path d="M145 249 H330" stroke-width="8" />
+    <path d="M145 273 H385" stroke-width="8" opacity="0.62" />
+    <path d="M145 429 H382" stroke-width="8" />
+    <path d="M145 453 H306" stroke-width="8" opacity="0.62" />
+    <path d="M145 609 H298" stroke-width="8" />
+    <path d="M145 633 H383" stroke-width="8" opacity="0.62" />
+  </g>
+
+  <!-- Three distinct perspectives converge -->
+  <path d="M454 246 C590 246 600 350 706 397" fill="none" stroke="#C9654B" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow-coral)" />
+  <path d="M454 426 C570 426 612 442 706 450" fill="none" stroke="#C49A3A" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow-gold)" />
+  <path d="M454 606 C590 606 600 542 706 503" fill="none" stroke="#527C8F" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow-blue)" />
+
+  <!-- PanelWise aggregation node -->
+  <g filter="url(#shadow)">
+    <rect x="730" y="310" width="310" height="280" rx="52" fill="#FBF8F1" stroke="#29251F" stroke-width="2" />
+  </g>
+  <image href="panelwise-logo.svg" x="765" y="361" width="240" height="84" preserveAspectRatio="xMidYMid meet" />
+  <path d="M799 474 H971" fill="none" stroke="#D8D1C4" stroke-width="1.5" />
+  <text x="885" y="515" fill="#71695F" font-family="Arial, Helvetica, sans-serif" font-size="14" letter-spacing="1.6" text-anchor="middle">FIND THE COMPLEMENT</text>
+
+  <!-- One unified result -->
+  <path d="M1064 450 C1120 450 1146 450 1204 450" fill="none" stroke="#252D37" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-ink)" />
+  <g filter="url(#shadow)">
+    <rect x="1230" y="310" width="260" height="280" rx="34" fill="#252D37" />
+  </g>
+  <text x="1265" y="355" fill="#F3EFE6" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" letter-spacing="2">FUSED ANSWER</text>
+  <g fill="none" stroke="#F3EFE6" stroke-linecap="round">
+    <path d="M1267 403 H1434" stroke-width="9" />
+    <path d="M1267 434 H1400" stroke-width="9" opacity="0.68" />
+    <path d="M1267 465 H1445" stroke-width="9" opacity="0.68" />
+    <path d="M1267 496 H1380" stroke-width="9" opacity="0.68" />
+  </g>
+  <path d="M1267 547 H1445" stroke="#F3EFE6" stroke-width="2" stroke-linecap="round" opacity="0.48" />
+
+  <text x="110" y="809" fill="#25211C" font-family="Georgia, 'Times New Roman', serif" font-size="31">Three perspectives in. One stronger answer out.</text>
+  <text x="1490" y="809" fill="#6A6259" font-family="Arial, Helvetica, sans-serif" font-size="15" text-anchor="end">panelwise</text>
+</svg>

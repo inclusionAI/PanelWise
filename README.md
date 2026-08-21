@@ -9,56 +9,111 @@
 <p align="center">
   <a href="https://github.com/inclusionAI/PanelWise/actions/workflows/ci.yml"><img src="https://github.com/inclusionAI/PanelWise/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache 2.0 license"></a>
+  <img src="https://img.shields.io/badge/python-3.10%2B-273D5D.svg" alt="Python 3.10 or newer">
 </p>
 
 # PanelWise
 
-**Fuse the complementary strengths of multiple models into one stronger, verifiable result.**
+**Fuse the complementary strengths of multiple models into one stronger result.**
 
-PanelWise starts with a simple question: if every weaker model produces an answer with something worth keeping, can we combine the complementary parts of those answers into a result that outperforms a stronger individual model? PanelWise lets multiple models examine the same problem independently and propose different analyses or next actions. It then organizes those judgments into a shared, executable workflow and submits the final result to an independent grader for verification.
+PanelWise starts with a simple question: if every model sees something worth keeping, can their complementary judgments produce a result stronger than any one answer? It is an embeddable Python aggregation engine that sends the same task to a configurable panel, preserves each model's distinct contribution, and coordinates those contributions through one of two execution topologies. The task itself is unrestricted; prompts, providers, and environment adapters define the domain.
 
 <p align="center">
   <img src="./assets/panelwise-flow-concept.png" alt="Three different model perspectives flow through PanelWise into one fused answer" width="1000">
 </p>
 
-PanelWise applies this idea to two workflows:
+## Two modes, one interface
 
-- **Deep research:** independent agents research the same question, a judge identifies consensus and blind spots, and a synthesizer writes one evidence-grounded report.
-- **Software engineering:** multiple agents propose the next action against the same live repository, PanelWise executes one merged action, and every subsequent round sees the resulting state.
+| Mode | Topology | Best fit |
+|---|---|---|
+| `--eval` | independent complete attempts → evaluator → synthesis | Answer-centric tasks, including deep research |
+| `--no-eval` | independent next-action proposals → one coordinated action → shared observable state → repeat | Stateful tasks, including coding |
 
-## How it works
+These are execution modes, not hard-coded task categories. Both accept any task string. Custom `ChatClient` and `Executor` implementations can connect the same engine to another provider or environment.
 
-### Deep research
-
-```text
-One research question
-        ↓
-Independent research agents × N
-        ↓
-Consensus · contradictions · unique evidence · blind spots
-        ↓
-One synthesized report
-        ↓
-Independent rubric grader
+```bash
+panelwise run "Compare PostgreSQL and MySQL for a large marketplace" --eval
+panelwise run "Fix the parser regression and run focused tests" --no-eval --workspace ./project
 ```
 
-Each research agent runs its own multi-step ReAct loop with search and page retrieval. PanelWise can preserve the research trajectories; it compares the reports structurally and grounds the final answer in the evidence the panel collected.
+`--eval` and `--no-eval` override one YAML value, so applications can switch topology without changing code or duplicating configuration.
 
-### Software engineering
+## Install
 
-```text
-Task specification + real repository
-        ↓
-Multiple models propose the next action
-        ↓
-PanelWise merges and executes one action
-        ↓
-Shared repository state for the next round
-        ↓
-Git patch → independent test harness
+PanelWise requires Python 3.10 or newer.
+
+```bash
+git clone https://github.com/inclusionAI/PanelWise.git
+cd PanelWise
+python3 -m venv .venv
+.venv/bin/python -m pip install .
 ```
 
-The coding workflow operates on a real working tree instead of asking models to imagine an entire diff. Models can therefore react to actual source files, command output, earlier edits, and test results. The final patch comes from `git diff` and can be evaluated by the benchmark's native harness.
+Install a pinned Git revision directly:
+
+```bash
+python3 -m pip install "panelwise @ git+https://github.com/inclusionAI/PanelWise.git@main"
+```
+
+Replace `main` with a release tag or commit SHA when reproducibility matters. Contributors should use `python -m pip install -e '.[dev]'`.
+
+## Five-minute start
+
+Create a documented configuration and validate it without making model calls:
+
+```bash
+panelwise init
+export OPENROUTER_API_KEY="..."
+panelwise validate --config panelwise.yaml
+```
+
+The generated YAML contains provider, model-role, concurrency, timeout, workspace, and prompt settings. The same file drives both modes:
+
+```yaml
+version: 1
+
+provider:
+  name: openrouter
+  api_key_env: OPENROUTER_API_KEY
+
+models:
+  panel: [z-ai/glm-5.1, minimax/minimax-m3, qwen/qwen3.7-max]
+  coordinator: z-ai/glm-5.1
+  evaluator: z-ai/glm-5.1
+
+execution:
+  eval: true
+  concurrency: 3
+  max_steps: 24
+  workspace: .
+```
+
+See the full [`panelwise.example.yaml`](./panelwise.example.yaml) and [configuration reference](./docs/configuration.md).
+
+## Python library
+
+```python
+import asyncio
+from panelwise import PanelWise
+
+async def main():
+    async with PanelWise.from_yaml("panelwise.yaml", eval=True) as engine:
+        result = await engine.run(
+            "Compare the strongest arguments for and against carbon taxes.",
+            request_id="example-1",
+        )
+
+    if result.ok:
+        print(result.output)
+    else:
+        print(result.status, result.errors)
+
+asyncio.run(main())
+```
+
+`PanelWiseResult` has one stable contract across both modes. It always includes `request_id`, `mode`, `status`, `output`, `usage`, and `errors`. Eval mode additionally returns independent `candidates` and structured `evaluation`; no-eval mode returns the shared `trajectory` and executor `artifacts`, including a Git patch when available.
+
+Individual panel failures are isolated. Invalid configuration raises a documented `PanelWiseError` subclass; it never terminates the host process with `SystemExit`. See the [Python API and failure contract](./docs/api.md).
 
 ## Results on DRACO
 
@@ -68,7 +123,7 @@ We evaluated PanelWise on all 100 tasks in [DRACO](https://arxiv.org/abs/2503.14
   <img src="./assets/panelwise-draco-results.png" alt="PanelWise DRACO benchmark results compared with published OpenRouter Fusion and Claude Fable 5 results" width="1000">
 </p>
 
-The **OpenRouter Fusion score of 68.3** and the **Claude Fable 5 score of 65.3** shown in the chart above and table below are both quoted from [OpenRouter's official Fusion launch post](https://openrouter.ai/blog/announcements/fusion-beats-frontier/). PanelWise scores come from our complete 100-task benchmark runs.
+The **OpenRouter Fusion score of 68.3** and **Claude Fable 5 score of 65.3** are both quoted from [OpenRouter's official Fusion launch post](https://openrouter.ai/blog/announcements/fusion-beats-frontier/). PanelWise scores come from our complete 100-task evaluation runs.
 
 | System | Models | DRACO score |
 |---|---|---:|
@@ -77,84 +132,45 @@ The **OpenRouter Fusion score of 68.3** and the **Claude Fable 5 score of 65.3**
 | **PanelWise budget panel** | GLM 5.1 + MiniMax M3 + Qwen 3.7 Max | **66.42** |
 | Strongest published single-model baseline | Claude Fable 5 | 65.3 |
 
-The frontier run scored **5.38 points above** OpenRouter's published result for the same three-model panel. The fully independent budget run scored **1.12 points above** the strongest published single-model baseline.
+The frontier panel scored **5.38 points above** the published Fusion result using the same three participant models. The independent budget run scored **1.12 points above** the strongest published single-model baseline. OpenRouter reports Fable 5 over 93 completed tasks because content filters blocked seven tasks, so that comparison is slightly uneven.
 
-OpenRouter's Fable 5 score reflects the 93 tasks it completed because content filters blocked seven tasks.
+The benchmark supports a claim about deep-research aggregation on DRACO; it is not a claim that every task or model panel improves.
 
-A panel-swap ablation replaced Qwen with Gemini 3.5 Flash and reached **70.95**. That experiment reused existing GLM and MiniMax reports, so we report it as evidence that model diversity can matter more than standalone ranking rather than as a fully independent end-to-end run.
+## Providers and extension points
 
-External comparison source: [OpenRouter's official Fusion launch post](https://openrouter.ai/blog/announcements/fusion-beats-frontier/).
+The built-in async client supports:
 
-## A real coding case: combining the insights of smaller models
+- OpenRouter;
+- ZenMux;
+- any OpenAI-compatible chat-completions base URL.
 
-We also tested the same idea on the SWE-Bench Pro task **“Proper WebFinger Response for Instance Actor”**:
+Provider-specific request fields can be supplied through YAML. A custom provider implements the small `ChatClient` protocol. A custom shared environment implements `Executor`, allowing no-eval mode to coordinate a shell, container, browser, database, simulator, or remote worker without changing the aggregation engine.
 
-```text
-instance_NodeBB__NodeBB-da0211b1a001d45d73b4c84c6417a4f1b0312575-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e
-```
+Trajectory mode's built-in local shell executor rejects obvious destructive commands, enforces time and output bounds, and starts every action in one configured workspace. It is a guardrail, not a sandbox; untrusted tasks belong in a disposable container or VM.
 
-NodeBB could resolve individual users through WebFinger, but it could not correctly resolve the site itself as an ActivityPub Application actor. A valid fix had to coordinate two controllers while preserving existing user behavior:
+## Documentation
 
-1. Use the bare `hostname` as the Application actor's `preferredUsername`, while using the configured site title as its display name.
-2. Keep `host`—including an optional port—for WebFinger address validation, but use `hostname` to recognize the instance actor.
-3. Resolve the instance before ordinary-user permissions and UID lookup.
-4. Preserve canonical user slugs, profile links, UID actor links, permission checks, and 404 behavior for normal users.
+- [CLI reference](./docs/cli.md)
+- [Configuration and provider setup](./docs/configuration.md)
+- [Python API and result contract](./docs/api.md)
+- [Examples](./examples)
+- [Troubleshooting](./docs/troubleshooting.md)
+- [Release process](./docs/releasing.md)
+- [Contributing and pull request requirements](./CONTRIBUTING.md)
+- [Security policy](./SECURITY.md)
+- [Changelog](./CHANGELOG.md)
 
-GLM 5.1, MiniMax M3, and Qwen 3.7 Max each found part of the solution. Their blind spots were different: one conflated `host` with `hostname`, another left instance discovery behind user permissions, and another changed the instance path while leaving a non-canonical ordinary-user link. PanelWise carried those partial judgments through a shared execution trajectory and converged on the two-controller fix.
-
-The important behavior is the sequence of corrections: locate both protocol entry points, separate address validation from actor identity, move the instance path ahead of user logic, revisit compatibility for existing users, and finally align the Application actor representation.
-
-## Quick start
-
-### Requirements
-
-- Python 3.11 recommended; the core package also runs on Python 3.9
-- An [OpenRouter](https://openrouter.ai/) or ZenMux API key
-- An [Exa](https://exa.ai/) API key when using the default direct-search backend
-- Docker and the SWE-Bench Pro harness for coding evaluation
-
-### Install
+## Development
 
 ```bash
-git clone https://github.com/inclusionAI/PanelWise.git
-cd PanelWise
-
-python3.11 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-cp .env.example .env
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/ruff check src tests examples
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python -m build
 ```
 
-Set `OPENROUTER_API_KEY` and `EXA_API_KEY` in `.env`. To use ZenMux instead, set `MODEL_PROVIDER=zenmux`, add `ZENMUX_API_KEY`, and keep `RESEARCH_SEARCH_BACKEND=exa`.
-
-### Validate the setup without external calls
-
-```bash
-.venv/bin/python fusion_full.py --dry-run
-```
-
-The dry run checks local configuration without loading benchmark data, calling a model or search service, invoking a grader, or creating output.
-
-### Run one deep-research task
-
-```bash
-.venv/bin/python fusion_full.py --limit 1
-```
-
-Results are written incrementally under `output/`, so interrupted runs can resume.
-
-### Run the complete deep-research evaluation
-
-```bash
-.venv/bin/python fusion_full.py
-```
-
-The root-level ablation and comparison scripts are preserved for research transparency. They may depend on historical model slugs, optional services, or intermediate artifacts and are not stable public interfaces.
-
-## Evaluation and reproducibility notes
-
-- External numbers are cited as published comparison points. Differences in model snapshots, search configuration, grader versions, and retry policy can affect absolute comparability.
-- `requirements.txt` contains core runtime dependencies. The optional official grader is pinned separately in `requirements-eval.txt` and requires Python 3.10 or newer.
-- Direct local page retrieval is enabled by default for trusted local research runs. Set `RESEARCH_ENABLE_DIRECT_FETCH=0` to disable it. This is an opt-out, not an SSRF sandbox.
+The test suite is offline and requires no model key. Public API, provider, executor, and architectural changes should begin with an issue; focused documentation fixes may go directly to a PR. Every behavior change must include reproducible verification. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Contributors
 
@@ -167,4 +183,4 @@ Contributors are displayed in the order defined in [CONTRIBUTORS.md](./CONTRIBUT
 
 ## License
 
-PanelWise is available under the [Apache License 2.0](./LICENSE). Initial contributors are listed in [CONTRIBUTORS.md](./CONTRIBUTORS.md).
+PanelWise is available under the [Apache License 2.0](./LICENSE).

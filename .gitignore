@@ -7,3 +7,9 @@ logs/
 __pycache__/
 *.pyc
 .DS_Store
+build/
+dist/
+*.egg-info/
+.coverage
+.pytest_cache/
+.ruff_cache/

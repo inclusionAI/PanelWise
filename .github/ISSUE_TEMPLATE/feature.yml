@@ -1,0 +1,26 @@
+name: Feature request
+description: Propose a focused extension or public behavior change
+title: "feature: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the concrete user problem, not only the proposed implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed scope
+      description: Explain why this belongs in the core instead of a prompt, client, executor, or application adapter.
+    validations:
+      required: true
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to implement this after maintainer agreement.
+

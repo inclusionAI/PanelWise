@@ -1,0 +1,52 @@
+version: 1
+
+provider:
+  name: openrouter
+  # OpenRouter and ZenMux defaults are built in. For another compatible gateway,
+  # use name: openai-compatible and set base_url plus api_key_env.
+  api_key_env: OPENROUTER_API_KEY
+  timeout_seconds: 120
+  retries: 2
+  headers: {}
+  request_options: {}
+  # Mode-specific values override common request_options. OpenRouter deep research
+  # can enable its server-managed search and fetch tools here:
+  # eval_request_options:
+  #   tools:
+  #     - type: openrouter:web_search
+  #     - type: openrouter:web_fetch
+  eval_request_options: {}
+  trajectory_request_options: {}
+
+models:
+  panel:
+    - z-ai/glm-5.1
+    - minimax/minimax-m3
+    - qwen/qwen3.7-max
+  coordinator: z-ai/glm-5.1
+  evaluator: z-ai/glm-5.1
+
+execution:
+  # true: complete independent answers -> evaluation -> synthesis
+  # false: proposals -> one shared action -> observable environment -> repeat
+  eval: true
+  concurrency: 3
+  max_steps: 24
+  workspace: .
+  command_timeout_seconds: 120
+  max_output_chars: 8000
+  allow_unsafe_commands: false
+
+# Every prompt is optional. Uncomment and replace only when a task needs a
+# specialized panel role, evaluator rubric, synthesizer, or trajectory policy.
+# prompts:
+#   eval_panel: |
+#     Solve the task independently and return a complete answer.
+#   evaluator: |
+#     Compare the attempts and return the documented JSON analysis object.
+#   synthesizer: |
+#     Produce one final answer from the attempts and evaluation.
+#   trajectory_panel: |
+#     Propose one observable next action as JSON.
+#   coordinator: |
+#     Fuse the proposals into one command or done decision as JSON.
